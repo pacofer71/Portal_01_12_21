@@ -44,6 +44,17 @@ class Users extends Conexion{
     public function delete(){
 
     }
+    public function readAll(){
+        $q="select * from users order by username";
+        $stmt=parent::$conexion->prepare($q);
+        try{
+            $stmt->execute();
+        }catch(PDOException $ex){
+            die("Error al devolver todos los usuarios: ".$ex->getMessage());
+        }
+        parent::$conexion=null;
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+    }
 
 
     //------------------------OTROS METODOS -------------------------------
@@ -100,6 +111,22 @@ class Users extends Conexion{
         }
         parent::$conexion=null;
         return $stmt->fetch(PDO::FETCH_OBJ)->img;
+
+
+    }
+    //devolver perfil
+    public function getPerfil(){
+        $q="select perfil from users where username=:u";
+        $stmt=parent::$conexion->prepare($q);
+        try{
+            $stmt->execute([
+                ':u'=>$this->username
+            ]);
+        }catch(PDOException $ex){
+            die("Erro al devolver imagen: ".$ex->getMessage());
+        }
+        parent::$conexion=null;
+        return $stmt->fetch(PDO::FETCH_OBJ)->perfil;
 
 
     }

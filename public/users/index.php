@@ -7,6 +7,14 @@ use Portal\Users;
 $imagen = (isset($_SESSION['user'])) ?
     "../" . (new Users)->setUsername($_SESSION['user'])->getImg() : // /img/users/admin.jpg
     "../img/users/invitado.png";
+
+$perfil = -1;
+if (isset($_SESSION['user'])) {
+    $perfil = (new Users)->setUsername($_SESSION['user'])->getPerfil();
+}
+
+$usuarios=(new Users)->readAll();
+
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -63,7 +71,39 @@ $imagen = (isset($_SESSION['user'])) ?
     <!-- FIN NAV BAR -->
     <h3 class="text-center mt-2">Usuarios del Portal</h3>
     <div class="container mt-2">
-
+        <?php
+        if ($perfil == 1) {
+            echo <<<TXT
+        <a href="register.php" class="btn btn-success"><i class="fas fa-user-plus"></i> Crear Usuario</a>
+        TXT;
+        }
+        ?>
+        <table class="table table-light table-striped mt-4">
+  <thead>
+    <tr>
+      <th scope="col">Información</th>
+      <th scope="col">Username</th>
+      <th scope="col">Email</th>
+      <th scope="col">Perfil</th>
+      <th scope="col">Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+      <?php
+      foreach($usuarios as $item){
+        $color=($item->perfil==1)? "red" : "blue";
+        echo "<tr>";
+        echo "<th scope='row'><a href='dusuario.php?id={$item->id}' class='btn btn-info'><i class='fas fa-info'></i></th>";
+        echo "<td style='color:$color'>{$item->username}</td>";
+        echo "<td style='color:$color'>{$item->email}</td>";
+        echo "<td style='color:$color'>{$item->perfil}</td>";
+        echo "<td>Acciones</a>";
+        echo "</tr>";
+    
+      }
+   ?>
+  </tbody>
+</table>
     </div>
 </body>
 
