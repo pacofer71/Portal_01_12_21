@@ -55,6 +55,19 @@ class Users extends Conexion{
         parent::$conexion=null;
         return $stmt->fetchAll(PDO::FETCH_OBJ);
     }
+    public function isValid($valor, $campo): bool{
+        $q="select * from users where $campo=:v";
+        $stmt=parent::$conexion->prepare($q);
+        try{
+            $stmt->execute([
+                ':v'=>$valor
+            ]);
+        }catch(PDOException $ex){
+            die("Erro al comprobar si hay usuarios: ".$ex->getMessage());
+        }
+        parent::$conexion=null;
+        return ($stmt->rowCount()==0);
+    }
 
 
     //------------------------OTROS METODOS -------------------------------

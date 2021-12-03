@@ -13,7 +13,7 @@ if (isset($_SESSION['user'])) {
     $perfil = (new Users)->setUsername($_SESSION['user'])->getPerfil();
 }
 
-$usuarios=(new Users)->readAll();
+$usuarios = (new Users)->readAll();
 
 ?>
 <!DOCTYPE html>
@@ -79,31 +79,54 @@ $usuarios=(new Users)->readAll();
         }
         ?>
         <table class="table table-light table-striped mt-4">
-  <thead>
-    <tr>
-      <th scope="col">Información</th>
-      <th scope="col">Username</th>
-      <th scope="col">Email</th>
-      <th scope="col">Perfil</th>
-      <th scope="col">Acciones</th>
-    </tr>
-  </thead>
-  <tbody>
-      <?php
-      foreach($usuarios as $item){
-        $color=($item->perfil==1)? "red" : "blue";
-        echo "<tr>";
-        echo "<th scope='row'><a href='dusuario.php?id={$item->id}' class='btn btn-info'><i class='fas fa-info'></i></th>";
-        echo "<td style='color:$color'>{$item->username}</td>";
-        echo "<td style='color:$color'>{$item->email}</td>";
-        echo "<td style='color:$color'>{$item->perfil}</td>";
-        echo "<td>Acciones</a>";
-        echo "</tr>";
-    
-      }
-   ?>
-  </tbody>
-</table>
+            <thead>
+                <tr>
+                    <th scope="col">Información</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Perfil</th>
+                    <th scope="col">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                foreach ($usuarios as $item) {
+                    $color = ($item->perfil == 1) ? "red" : "blue";
+                    echo "<tr>";
+                    echo "<th scope='row'><a href='dusuario.php?id={$item->id}' class='btn btn-info'><i class='fas fa-info'></i></th>";
+                    echo "<td style='color:$color'>{$item->username}</td>";
+                    echo "<td style='color:$color'>{$item->email}</td>";
+                    echo "<td style='color:$color'>{$item->perfil}</td>";
+                    echo "<td>";
+                    if ($perfil == 1) {
+                        //soy admin veré todo los botones
+                        echo <<<TXT
+            <form name="q" method='POST' action="buser.php">
+            <input type='hidden' name='id' value='{$item->id}' />
+            <a href="eusuario.php?id={$item->id}" class="btn btn-warning">
+            <i class="fas fa-edit"></i>
+            </a>
+            <button type='submit' class='btn btn-danger' onclick="return confirm('¿Borrar Usuario?');"><i class="fas fa-trash"></i></button>
+            </form>
+            TXT;
+                    } elseif ($perfil == 0) {
+                        //soy usuario normal solo el boton editar para mi
+                        if ($_SESSION['user'] == $item->username) {
+                            echo "<a href='eusuario.php?id={$item->id}' class='btn btn-warning'>";
+                            echo "<i class='fas fa-edit'></i></a>";
+                        } else {
+                            echo "<button class='btn btn-danger' disabled><i class='fas fa-exclamation-circle'></i></button>";
+                        }
+                    } else {
+                        //nada de nada
+                        echo "<a href='login.php' class='btn btn-info'><i class='fas fa-sign-in-alt'</a>";
+                    }
+                    echo "</td>";
+                    echo "</tr>";
+                }
+                ?>
+            </tbody>
+        </table>
     </div>
 </body>
 
