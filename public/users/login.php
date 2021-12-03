@@ -119,7 +119,7 @@ if (isset($_POST['btnLogin'])) {
                         ?>
                         
                         <button type="reset" class="btn btn-warning"><i class="fas fa-broom"></i> Limpiar</button>
-                        <a href="cuser.php" class="btn btn-danger"><i class="fas fa-sign-in-alt"></i> Registarse</a>
+                        <a href="register.php" class="btn btn-danger"><i class="fas fa-sign-in-alt"></i> Registarse</a>
                     </div>
 
                 </form>

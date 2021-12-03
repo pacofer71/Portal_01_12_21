@@ -1,7 +1,0 @@
-;renombralo a .config
-;completando con tus credenciales
-[opciones]
-host=tu servidor
-dbname=tu base de datos
-user=tu usuario 
-pass=tu pass

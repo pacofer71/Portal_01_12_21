@@ -44,9 +44,10 @@ function comprobarExiste($v, $c){
 
     }
 }
+
 if(isset($_POST['registrar'])){
 
-    $imagen="/img/users/default.png";
+    $imagen="/img/users/users.png";
     
     $nombre=trim($_POST['username']);
     $email=trim($_POST['email']);
@@ -61,14 +62,14 @@ if(isset($_POST['registrar'])){
 
     if(is_uploaded_file($_FILES['img']['tmp_name'])){
         if(isImagen($_FILES['img']['type'])){
-            $nombre="/img/users/".uniqid().$_FILE['img']['name'];
-            if(!move_uploaded_file($_FILE['img']['tmp_name'], "..".$nombre)){
+            $nombreImg=uniqid()."_".$_FILES['img']['name'];
+            if(!move_uploaded_file($_FILES['img']['tmp_name'], dirname(__DIR__)."/img/users/".$nombreImg)){
                 $_SESSION['errimg']="No se pudo guardar la imagen";
                 $error=true;
                 
             }
             else{
-                $imagen=$nombre;
+                $imagen="/img/users/$nombreImg";
             }
 
         }

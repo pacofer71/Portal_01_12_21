@@ -72,6 +72,16 @@ $usuarios = (new Users)->readAll();
     <h3 class="text-center mt-2">Usuarios del Portal</h3>
     <div class="container mt-2">
         <?php
+        if (isset($_SESSION['mensaje'])) {
+            echo <<<TXT
+                <div class="alert alert-primary mb-2" role="alert">
+                <b>Información: </b>{$_SESSION['mensaje']}
+                </div>
+        TXT;
+            unset($_SESSION['mensaje']);
+        }
+        ?>
+        <?php
         if ($perfil == 1) {
             echo <<<TXT
         <a href="register.php" class="btn btn-success"><i class="fas fa-user-plus"></i> Crear Usuario</a>
@@ -99,10 +109,11 @@ $usuarios = (new Users)->readAll();
                     echo "<td style='color:$color'>{$item->perfil}</td>";
                     echo "<td>";
                     if ($perfil == 1) {
+                        $user = serialize($item);
                         //soy admin veré todo los botones
                         echo <<<TXT
             <form name="q" method='POST' action="buser.php">
-            <input type='hidden' name='id' value='{$item->id}' />
+            <input type='hidden' name='id' value='$user' />
             <a href="eusuario.php?id={$item->id}" class="btn btn-warning">
             <i class="fas fa-edit"></i>
             </a>
